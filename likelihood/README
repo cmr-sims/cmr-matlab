@@ -1,0 +1,39 @@
+
+MODEL FUNCTIONS
+===============
+
+likelihood based:
+
+tcm_lc_2p_sem.m.  7-parameter version of TCM. Requires fstruct, which contains semantic matrix, as well as pres_itemnos and recalls matrix.  Also takes param vector. lc = luce choice, 2p = 2 parameter primacy.  Takes a set of recall sequences, returns a set of likelihood values.  Returns a matrix of conditional probabilities for each output position, plus the conditional probability of the recall termination, so has an extra element relative to the corresponding recall sequence. 
+
+generative versions:
+
+gen_tcm_lc_2p_sem.m  This is like the likelihood version, but generates recall sequences, so you can validate the likelihood version.  eval_model_summary would use this function to find best-fit parameters for the summary statistics.
+
+eval_model.m  Takes a function handle for one of the likelihood based models, and aggregates the conditional probabilities into likelihoods by summing across the rows.  Then sums over trials and takes the negative, so you can use it with fminsearch.  Right now, this will only work with the sem version of the model, because I changed the call signature as well as added lines that are specific to semantics.
+
+eval_model_summary.m  This uses the generative version of the model, generates recall sequences, then does summary stats on those recall sequences, and compares those to the target summary stats.  Currently using RMSD, but could / should? be modified to use chi2.  Also, the summary stats chosen were done so without too much consideration.  Could add in PFR or even stop prob.  Who knows.
+
+create_plots.m  This one just takes the generated sequences, and the actual sequences, and makes side by side plots for the basic summary stats.  
+
+WRAPPERS
+========
+
+wrap_fmsb_P09_sem.m  This has the sample code for running an fminsearchbnd using eval_model, and the semantic version of TCM.  Use this to fit the actual data.
+
+wrap_P09_sem_gen.m Has some sample code to generate data using the semantic version of TCM.
+
+SANITY
+======
+
+generate_ordered_subsets.m. If you want to send into eval_model, for a short LL, all possible tsequences that the model could generate, and check whether the probabilities sum to 1.  
+
+
+IN GENETIC ALG/DEV
+==================
+
+run_fmsb_dce.m This is in genetic_alg/dev, and is used when you want to run a number of parallel fminsearchbnd tasks on a data set.
+
+run_fmsb_precover_dce.m This is not in final form, because some changes to the scheduler code needs to be pulled over from run_fmsb_dce, otherwise it should work.  You have to specify a particular parameter set that you want to try to recover a bunch of times.  Each time, the code will generate a new synthetic data matrix. This hasn't been sanity checked since the last round of changes.  There could be an input that had its name changed. 
+
+

@@ -1,0 +1,53 @@
+TO-DO CMR anonymous
+
+- present_item.m
+  - anonymize weight update
+    - separate components for determine learning rate (which can add a primacy factor) and     
+       weight update (which implements a weight change rule).  Determining learning rate can 
+       update a lrate placeholder on the net structure, then only net needs to be passed in to the 
+       weight update function.
+
+NWM NOTES:
+
+ - There's no need to have the user set the full path to resources files like
+LSA matrices. If the resources file is on the path, the users need only specify
+the filename, not the whole path (assuming the filenames are unique, which they
+seem to be based on my first look). I've changed the CMR params files to specify
+only the filename
+- run_* functions should save the state value of the random number generator,
+ so the exact simulation can be reproduced later if needed
+ - Can probably get huge increase in speed if reimplement decision_accum in C
+ - Apparently similar functions: run_taskFR, simulate_taskFR, prepare_taskFR. Do
+ all of these functions still need to exist? If so, should give them more
+ descriptive names or at least make the differences more clear in the docstring
+
+Doc Strings
+Sanity Checks
+- specific:
+  - create_network.m
+  - present_distraction.m
+    - does length of disrupt regions match the number of subregions?
+  - simulate_fr.m
+    - are all required parameters present?
+    - are there enough indices in each subregion?
+
+- init_network.m
+  - init_index is not used if init_orthogonal is set to 1.
+
+update any params affected by moving LSA_tfr.mat to resources dir
+
+
+create_gated_network (from create_network)
+- call from init_network
+if isfield(param,'init_gates') && param.init_gates
+  net.w_g = zeros(total_dimensions);
+  for i=1:length(net.f_sub)
+    for j=1:length(net.c_sub)
+      % the lrate matrices
+      net.w_g(net.c_sub{j}.idx,net.f_sub{i}.idx) = ...
+          randn(length(net.c_sub{j}.idx),length(net.f_sub{i}.idx)) ...
+          * param.g_scale(i,j);
+    end
+  end
+end
+

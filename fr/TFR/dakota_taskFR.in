@@ -1,0 +1,40 @@
+## DAKOTA INPUT FILE - dakota_taskFR.in
+
+strategy,
+	single_method
+
+method,
+	id_method = 'SAMPLING'
+	model_pointer = 'M1'
+	nond_sampling
+		samples = 10
+		seed = 42 rng rnum2
+		sample_type lhs
+		all_variables
+
+model,
+	id_model = 'M1'
+	single
+		variables_pointer = 'V1'
+		interface_pointer = 'I1'
+		responses_pointer = 'R1'
+
+variables,
+	id_variables = 'V1'
+	continuous_design = 13
+			  upper_bounds 1 1 1 2.5 1 0.5 0.7 0.7 0.7 1000 4 1.0 0.95
+			  lower_bounds 0.4 0.4 0.4 0.5 0.1 0 0 0 0 100 0 0 0
+			  descriptors 'B_enc_temp' 'B_rec_temp' 'B_source' 'p_scale' 'p_decay' 'task_lrate_cf' 'K' 'L' 'eta' 'tau' 's' 'gamma_fc' 'd'
+
+interface,
+	    system, 
+	    	    asynchronous
+	    direct
+		analysis_driver = 'matlab'
+		analysis_components = 'dakota_taskFR.m'
+
+responses,
+	id_responses = 'R1'
+	num_objective_functions = 1
+	no_gradients
+	no_hessians
