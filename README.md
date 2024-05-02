@@ -9,7 +9,7 @@ The implementation of CMR from Polyn, Norman, and Kahana (2009) A context mainte
 
 The implementation of CMR used by Kragel, Morton, and Polyn (2015) Neural activity in the medial temporal lobe reveals the fidelity of mental time travel. Journal of Neuroscience, 35 (7) 2914-2926.
 
-## LohnEtal15
+## CMR2
 
 The implementation of CMR used by Lohnas, Polyn, and Kahana (2015) Expanding the scope of memory search: Modeling intralist and interlist effects in free recall. Psychological Review, 122 (2) 337-363.
 
